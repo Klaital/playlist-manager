@@ -3,4 +3,5 @@
 *.m3u
 *.ogg
 *.jpg
+*.sqlite3
 Thumbs.db
