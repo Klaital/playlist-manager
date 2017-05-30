@@ -33,3 +33,13 @@ class MediaScanner
     end
 end
 
+##################
+##### MAIN #######
+##################
+if __FILE__ == $0
+    scanner = MediaScanner.new
+    puts "Scanning..."
+    songs = scanner.scan
+    puts "Found #{songs.length} unique audio files."
+
+end
