@@ -1,4 +1,5 @@
 require_relative '../lib/db.rb'
+require 'set'
 
 class MediaScanner
     def initialize(root_path='.')
@@ -21,10 +22,13 @@ class MediaScanner
             Dir.glob(File.join(@root_path, '**', pattern)).each {|file| files.add(file)}
         end
         
+        puts "Scanned #{files.length} music files. Preparing for DB insert..."
         # Add each discovered file to the files table
         if add_to_db
             files.each do |f|
-                DB.execute "INSERT INTO #{FILES_TABLE} [path] VALUES ('#{f}')"
+                print "Inserting #{f} ..."
+                DB.execute "INSERT INTO #{FILES_TABLE} (path) VALUES (?)", f
+                puts "\t[DONE]"
             end
         end
 
@@ -37,9 +41,8 @@ end
 ##### MAIN #######
 ##################
 if __FILE__ == $0
-    scanner = MediaScanner.new
+    scanner = MediaScanner.new(ARGV[-1])
     puts "Scanning..."
     songs = scanner.scan
     puts "Found #{songs.length} unique audio files."
-
 end
